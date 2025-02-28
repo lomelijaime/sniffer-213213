@@ -16,7 +16,7 @@ def read_ethernet_header(file):
             dest_mac_str = ":".join(f"{byte:02x}" for byte in dest_mac)
             src_mac_str = ":".join(f"{byte:02x}" for byte in src_mac)
             ethertype_str = f"0x{ethertype.hex()}"
-            print('\n--- Cabecera Ethernet ---')
+            print('\n------- Ethernet Header -------')
             print(f"MAC Destino: {dest_mac_str}")
             print(f"MAC Origen: {src_mac_str}")
             print(f"Ethertype: {ethertype_str}")
@@ -99,6 +99,60 @@ def read_ipv4_header(file):
     except Exception as e:
         print(f"Error inesperado: {e}")
 
+def read_icmpv4_header(file):
+    try:
+        with open(f"data/{file}", 'rb') as data:
+            data.seek(34)  # Saltar la cabecera Ethernet (14 bytes) + IPv4 (20 bytes)
+            bin_data = data.read(8)  # Leer los primeros 8 bytes de la cabecera ICMP
 
-read_ethernet_header("ethernet_ipv4_icmp_ping_2.bin")
-read_ipv4_header("ethernet_ipv4_icmp_ping_2.bin")
+            if len(bin_data) < 8:
+                print("Error: Archivo demasiado pequeño para contener una cabecera ICMPv4 válida.")
+                return
+
+            # Extraer los campos de la cabecera ICMP
+            icmp_type = bin_data[0]
+            icmp_code = bin_data[1]
+            checksum = int.from_bytes(bin_data[2:4], 'big')
+            identifier = int.from_bytes(bin_data[4:6], 'big')
+            sequence_number = int.from_bytes(bin_data[6:8], 'big')
+
+
+           # Mapear tipos de ICMP
+            type_messages = {
+                0: 'Host confirmation (Echo Reply)',
+                3: 'Destination or service unreachable',
+                5: 'Route redirection',
+                8: 'Echo request',
+                11: 'Time exceeded'
+            }
+
+            # Mapear códigos de ICMP
+            code_messages = {
+                0: 'Network unreachable',
+                1: 'Host unreachable',
+                2: 'Protocol unreachable',
+                3: 'Port unreachable'
+            }
+
+            icmp_type_str = type_messages.get(icmp_type, 'Otro')
+            icmp_code_str = code_messages.get(icmp_code, 'Desconocido')
+
+            # Imprimir la cabecera ICMPv4
+            print("\n------------------------ ICMPv4 Header ------------------------")
+            print(f"Type:              {icmp_type} ({icmp_type_str})")
+            print(f"Code:              {icmp_code} ({icmp_code_str})")
+            print(f"Checksum:          0x{checksum:04x}")
+            print(f"Identifier:        {identifier}")
+            print(f"Sequence Number:   {sequence_number}")
+            print("-------------------------------------------------------------")
+
+    except FileNotFoundError:
+        print(f"Error: No se encontró el archivo '{file}' en la carpeta data/")
+    except Exception as e:
+        print(f"Error inesperado: {e}")
+
+
+# Llamadas a las funciones para probar
+read_ethernet_header("ethernet_ipv4_icmp_ping.bin")
+read_ipv4_header("ethernet_ipv4_icmp_ping.bin")
+read_icmpv4_header("ethernet_ipv4_icmp_ping.bin")

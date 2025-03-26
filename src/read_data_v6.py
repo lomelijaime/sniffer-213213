@@ -88,7 +88,45 @@ def read_ipv6_header(file):
     except Exception as e:
         print(f"Error: {e}")
 
+def read_icmpv6_header(file):
+    """ Lee y muestra los campos de la cabecera ICMPv6. """
+    try:
+        filepath = os.path.join("data", file)
+        with open(filepath, 'rb') as data:
+            data.seek(54)  # Saltar la cabecera Ethernet (14B) + IPv6 (40B)
+            bin_data = data.read(4)
+            if len(bin_data) < 4:
+                raise ValueError("Archivo demasiado pequeño para una cabecera ICMPv6 válida.")
+
+            icmp_type, icmp_code, icmp_checksum = struct.unpack("!B B H", bin_data)
+
+            # Clasificación de mensajes ICMPv6
+            if icmp_type < 128:
+                tipo_msg = "Mensaje de error"
+            else:
+                tipo_msg = "Mensaje informativo"
+
+            icmp_type_map = {
+                1: "Destino inalcanzable", 2: "Paquete demasiado grande", 3: "Tiempo excedido",
+                128: "Solicitud de eco (ping)", 129: "Respuesta de eco (pong)",
+                133: "Solicitud de Router (Router Solicitation)", 
+                134: "Anuncio de Router (Router Advertisement)",
+                135: "Solicitud de Vecino (Neighbor Solicitation)",
+                136: "Anuncio de Vecino (Neighbor Advertisement)",
+                137: "Redireccionamiento (Redirect Message)"
+            }
+            icmp_type_str = icmp_type_map.get(icmp_type, f"Desconocido ({icmp_type})")
+
+            print("\n-------------------------- ICMPv6 Header --------------------------")
+            print(f"Tipo:         {icmp_type} ({tipo_msg}) - {icmp_type_str}")
+            print(f"Código:       {icmp_code}")
+            print(f"Checksum:     0x{icmp_checksum:04x}")
+            print("--------------------------------------------------------------------")
+
+    except Exception as e:
+        print(f"Error: {e}")
 
 # Llamadas a las funciones para probar
 read_ethernet_header("ipv6_nd_adv_1.bin")
 read_ipv6_header("ipv6_nd_adv_1.bin")
+read_icmpv6_header("ipv6_nd_adv_1.bin")

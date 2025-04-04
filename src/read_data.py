@@ -208,9 +208,72 @@ def read_arp_header(file):
         print(f"Error inesperado: {e}")
 
 
+def read_tcp_header(file):
+    try:
+        with open(f"data/{file}", 'rb') as data:
+            data.seek(34)  # Saltar la cabecera Ethernet (14 bytes) + IPv4 (20 bytes)
+            bin_data = data.read(20)  # Leer la cabecera TCP mínima
+
+            if len(bin_data) < 20:
+                print("Error: Archivo demasiado pequeño para contener una cabecera TCP válida.")
+                return
+
+            # Desempaquetar la cabecera TCP
+            src_port, dest_port, sequence, ack_number, offset_reserved_flags, window, checksum, urgent_pointer = struct.unpack('!HHIIHHHH', bin_data)
+
+            # Extraer el tamaño de la cabecera (Offset) en bytes
+            data_offset = (offset_reserved_flags >> 12) * 4
+
+            # Extraer banderas TCP
+            flags = offset_reserved_flags & 0x01FF  # Últimos 9 bits son banderas TCP
+            ns = (flags >> 8) & 1
+            cwr = (flags >> 7) & 1
+            ece = (flags >> 6) & 1
+            urg = (flags >> 5) & 1
+            ack = (flags >> 4) & 1
+            psh = (flags >> 3) & 1
+            rst = (flags >> 2) & 1
+            syn = (flags >> 1) & 1
+            fin = flags & 1
+
+            # Imprimir la cabecera TCP
+            print("\n------------------- Transmission Control Protocol -------------------")
+            print(f"Puerto de Origen: {src_port}")
+            print(f"Puerto de Destino: {dest_port}")
+            print(f"N° Secuencia: {sequence}")
+            print(f"N° Acuse de recibo: {ack_number}")
+            print(f"Longitud de Cabecera: {data_offset} bytes")
+            print("Reservado: 000 Not Set")
+            print("Banderas TCP:")
+            print(f"  NS:  {ns} {'Set' if ns else 'Not set'}")
+            print(f"  CWR: {cwr} {'Set' if cwr else 'Not set'}")
+            print(f"  ECE: {ece} {'Set' if ece else 'Not set'}")
+            print(f"  URG: {urg} {'Set' if urg else 'Not set'}")
+            print(f"  ACK: {ack} {'Set' if ack else 'Not set'}")
+            print(f"  PSH: {psh} {'Set' if psh else 'Not set'}")
+            print(f"  RST: {rst} {'Set' if rst else 'Not set'}")
+            print(f"  SYN: {syn} {'Set' if syn else 'Not set'}")
+            print(f"  FIN: {fin} {'Set' if fin else 'Not set'}")
+            print(f"Tamaño Ventana de Recepción: {window}")
+            print(f"Suma de Verificación: 0x{checksum:04x} ({checksum})")
+            print(f"Puntero Urgente: {urgent_pointer}")
+            
+            # Leer carga útil TCP si existe
+            payload = data.read()
+            payload_hex = " ".join(f"{byte:02x}" for byte in payload[:24])  # Mostrar solo los primeros 24 bytes
+            print(f"TCP payload ({len(payload)} byte(s)):")
+            print(f"Datos: {payload_hex}")
+
+    except FileNotFoundError:
+        print(f"Error: No se encontró el archivo '{file}' en la carpeta data/")
+    except Exception as e:
+        print(f"Error inesperado: {e}")
+
+
 # Llamadas a las funciones para probar
 read_ethernet_header("ethernet_ipv4_icmp_ping.bin")
 read_ipv4_header("ethernet_ipv4_icmp_ping.bin")
 read_icmpv4_header("ethernet_ipv4_icmp_ping.bin")
 read_arp_header("ethernet_arp_reply.bin")
 read_arp_header("ethernet_arp_request.bin")
+read_tcp_header("ethernet_ipv4_tcp_syn.bin")

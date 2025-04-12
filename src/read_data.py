@@ -161,6 +161,7 @@ def read_icmpv4_header(file):
 def read_arp_header(file):
     try:
         with open(f"data/{file}", 'rb') as data:
+            data.seek(14)  # Saltar la cabecera Ethernet
             bin_data = data.read(28)
             if len(bin_data) < 28:
                 print("Error: Archivo demasiado pequeño para contener una cabecera ARP válida.")
@@ -270,6 +271,29 @@ def read_tcp_header(file):
         print(f"Error inesperado: {e}")
 
 
+def read_udp_header(file):
+    try:
+        with open(f"data/{file}", 'rb') as data:
+            data.seek(34)  # Saltar la cabecera Ethernet e IPv4
+            bin_data = data.read(8)
+
+            if len(bin_data) < 8:
+                print("Error: Archivo demasiado pequeño para ser una cabecera UDP válida.")
+                return
+
+            src_port, dest_port, length, checksum = struct.unpack('!HHHH', bin_data) #! = big endian, H = 2 bytes
+
+            print("\n------------------- UDP Header -------------------")
+            print(f"Puerto de Origen: {src_port}")
+            print(f"Puerto de Destino: {dest_port}")
+            print(f"Longitud: {length} bytes")
+            print(f"Suma de Verificación: 0x{checksum:04x} ({checksum})")
+
+    except FileNotFoundError:
+        print(f"Error: No se encontró el archivo '{file}' en la carpeta data/")
+    except Exception as e:
+        print(f"Error inesperado: {e}")
+
 # Llamadas a las funciones para probar
 read_ethernet_header("ethernet_ipv4_icmp_ping.bin")
 read_ipv4_header("ethernet_ipv4_icmp_ping.bin")
@@ -277,3 +301,4 @@ read_icmpv4_header("ethernet_ipv4_icmp_ping.bin")
 read_arp_header("ethernet_arp_reply.bin")
 read_arp_header("ethernet_arp_request.bin")
 read_tcp_header("ethernet_ipv4_tcp_syn.bin")
+read_udp_header("ethernet_ipv4_udp_dns.bin")

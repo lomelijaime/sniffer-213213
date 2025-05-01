@@ -29,4 +29,4 @@ def bin_to_txt(bin_file, txt_file, mode='hex'):
         print(f"Error inesperado: {e}")
 
 # Ejemplo de uso
-bin_to_txt('D:\Sniffer-Beatriz\sniffer-213213\data\ipv6_icmpv6_destination_unreachable.bin', 'salida.txt', mode='hex')
+# bin_to_txt('D:\Sniffer-Beatriz\sniffer-213213\data\ipv6_icmpv6_destination_unreachable.bin', 'salida.txt', mode='hex')

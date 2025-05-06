@@ -313,7 +313,7 @@ def process_packet(packet):
     global packet_count
     
     if packet_count >= MAX_PACKETS:
-        print(f"\nSe ha alcanzado el límite de {MAX_PACKETS} paquetes.")
+        print(f"\nSe ha alcanzado el limite de {MAX_PACKETS} paquetes.")
         return
     
     packet_count += 1
@@ -350,18 +350,19 @@ def main():
     global packet_count
     packet_count = 0
     
-    interfaz = "Wi-Fi"
+    interfaz = "Ethernet"
     log_file = setup_logging()
     
     start_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     print(f"=== Inicio de captura - {start_time} ===")
     print(f"Interfaz: {interfaz}")
-    print(f"Límite: {MAX_PACKETS} paquetes")
+    print(f"Limite: {MAX_PACKETS} paquetes")
     print(f"Archivo: {LOG_FILE}")
     print("="*60 + "\n")
     
     try:
-        sniff(prn=process_packet, iface=interfaz, store=0, count=MAX_PACKETS)
+        # icmp, tcp, udp, arp, tcp port 80-53, ip6, ip
+        sniff(filter="icmp", prn=process_packet, iface=interfaz, store=0, count=MAX_PACKETS)
     except KeyboardInterrupt:
         print("\nCaptura interrumpida por usuario")
     except Exception as e:

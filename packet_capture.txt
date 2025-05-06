@@ -1,0 +1,118 @@
+=== Inicio de captura - 2025-05-05 18:53:55 ===
+Interfaz: Ethernet
+Limite: 50 paquetes
+Archivo: packet_capture.txt
+============================================================
+
+
+=============== Paquete #1 - 2025-05-05 18:55:08.140 ===============
+
+-------------------------- Ethernet Header --------------------------
+MAC Destino: 20:87:ec:ff:36:aa
+MAC Origen:  d0:37:45:dc:45:23
+Ethertype:   0x0800
+
+-------------------------- IPv4 Header --------------------------
+Versión:            4
+IHL:                20 bytes
+TOS:                0x00
+Longitud Total:     60
+Identificación:     0x1064
+Flags:              0x0
+Offset Fragmento:   0
+TTL:                128
+Protocolo:          1 (ICMP)
+Checksum:           0x0000
+IP Origen:          192.168.100.35
+IP Destino:         192.100.3.10
+
+-------------------------- ICMPv4 Header --------------------------
+Tipo:               8 (Echo Request)
+Código:             0
+Checksum:           0x4d5a
+Identificador:      0x0001
+Número Secuencia:   1
+
+=============== Paquete #2 - 2025-05-05 18:55:12.878 ===============
+
+-------------------------- Ethernet Header --------------------------
+MAC Destino: 20:87:ec:ff:36:aa
+MAC Origen:  d0:37:45:dc:45:23
+Ethertype:   0x0800
+
+-------------------------- IPv4 Header --------------------------
+Versión:            4
+IHL:                20 bytes
+TOS:                0x00
+Longitud Total:     60
+Identificación:     0x1065
+Flags:              0x0
+Offset Fragmento:   0
+TTL:                128
+Protocolo:          1 (ICMP)
+Checksum:           0x0000
+IP Origen:          192.168.100.35
+IP Destino:         192.100.3.10
+
+-------------------------- ICMPv4 Header --------------------------
+Tipo:               8 (Echo Request)
+Código:             0
+Checksum:           0x4d59
+Identificador:      0x0001
+Número Secuencia:   2
+
+=============== Paquete #3 - 2025-05-05 18:55:17.863 ===============
+
+-------------------------- Ethernet Header --------------------------
+MAC Destino: 20:87:ec:ff:36:aa
+MAC Origen:  d0:37:45:dc:45:23
+Ethertype:   0x0800
+
+-------------------------- IPv4 Header --------------------------
+Versión:            4
+IHL:                20 bytes
+TOS:                0x00
+Longitud Total:     60
+Identificación:     0x1066
+Flags:              0x0
+Offset Fragmento:   0
+TTL:                128
+Protocolo:          1 (ICMP)
+Checksum:           0x0000
+IP Origen:          192.168.100.35
+IP Destino:         192.100.3.10
+
+-------------------------- ICMPv4 Header --------------------------
+Tipo:               8 (Echo Request)
+Código:             0
+Checksum:           0x4d58
+Identificador:      0x0001
+Número Secuencia:   3
+
+=============== Paquete #4 - 2025-05-05 18:55:22.873 ===============
+
+-------------------------- Ethernet Header --------------------------
+MAC Destino: 20:87:ec:ff:36:aa
+MAC Origen:  d0:37:45:dc:45:23
+Ethertype:   0x0800
+
+-------------------------- IPv4 Header --------------------------
+Versión:            4
+IHL:                20 bytes
+TOS:                0x00
+Longitud Total:     60
+Identificación:     0x1067
+Flags:              0x0
+Offset Fragmento:   0
+TTL:                128
+Protocolo:          1 (ICMP)
+Checksum:           0x0000
+IP Origen:          192.168.100.35
+IP Destino:         192.100.3.10
+
+-------------------------- ICMPv4 Header --------------------------
+Tipo:               8 (Echo Request)
+Código:             0
+Checksum:           0x4d57
+Identificador:      0x0001
+Número Secuencia:   4
